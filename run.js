@@ -5,12 +5,12 @@
 // Fill these in with the settings for voting.
 
 	// The form page itself.
-var page = 'http://survey.constantcontact.com/survey/hash1/hash2/questions',
+var page = 'http://survey.constantcontact.com/survey/a07e8sd4s5xhqd06wkx/start',
 	// The page that linked to the initial form request.
 	referrer = 'http://www.example.com/',
 	// This is the data for the vote itself. Include any other form data it needs.
 	formData = {
-		'currentResponsePageQuestions[0].currentResponseSelected': '1'
+		'currentResponsePageQuestions[0].currentResponseSelected': 3
 	},
 	// We're going to wait a random time between votes. This is the max time for the random number in milliseconds.
 	// The target number of votes per day. It won't be this actual amount, since we're going to use it as a guide for randomness.
@@ -52,12 +52,7 @@ function vote() {
 		// These headers could be set up based on which user agent is being used.
 		headers: {
 			'User-Agent': thisUA,
-			'Referer': referrer,
-			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'Accept-Language': 'en-US,en;q=0.8',
-			'Cache-Control': 'no-cache',
-			'Connection': 'keep-alive',
-			'Pragma': 'no-cache'
+			'Referer': referrer
 		}
 	};
 	// Make the call.
@@ -68,9 +63,8 @@ function vote() {
 			console.log('Form page loaded, now sending vote.');
 			// Wait 12 seconds before voting.
 			setTimeout( function() {
-				// If the URL is different than the original location,
-				// then uncomment this and set the second URL.
-				//request.url = 'http://www.example.com/form-post-url';
+				// This page will redirect you to a new form page, with a unique URL.
+				requestOptions.url = response.request.uri.href;
 				// Make adjustments for the form posting.
 				requestOptions.method = 'POST';
 				requestOptions.form = formData;
@@ -78,7 +72,7 @@ function vote() {
 				requestOptions.headers['Referer'] = page;
 				// Now post the actual form.
 				request( requestOptions, function( e, r, b ) {
-					console.log( b );
+					console.log( r );
 				});
 			}, 12000 );
 		} else {
